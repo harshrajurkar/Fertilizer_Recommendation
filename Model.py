@@ -1,8 +1,8 @@
-# Import necessary libraries
 import numpy as np
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 import pickle
+import time
 
 # Load the dataset (assuming you have a dataset with NPK values, Crop Name, and corresponding fertilizer recommendations)
 # Replace "your_dataset.csv" with the actual file name
@@ -33,6 +33,9 @@ user_nitrogen = float(input("Enter Nitrogen value: "))
 user_potassium = float(input("Enter Potassium value: "))
 user_phosphorous = float(input("Enter Phosphorous value: "))
 user_crop_name = input("Enter Crop Name: ")
+
+print("Waiting for prediction...")  # Display the "waiting" message
+time.sleep(3)  # Simulate a 5-second delay
 
 user_input_values = np.array([[user_nitrogen, user_potassium, user_phosphorous, user_crop_name]])
 
