@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 import pickle
 import time
+import tensorflow as tf
 
 # Load the dataset (assuming you have a dataset with NPK values, Crop Name, and corresponding fertilizer recommendations)
 # Replace "your_dataset.csv" with the actual file name
@@ -35,13 +36,22 @@ user_phosphorous = float(input("Enter Phosphorous value: "))
 user_crop_name = input("Enter Crop Name: ")
 
 print("Waiting for prediction...")  # Display the "waiting" message
-time.sleep(3)  # Simulate a 5-second delay
+time.sleep(3)  # Simulate a 3-second delay
 
-user_input_values = np.array([[user_nitrogen, user_potassium, user_phosphorous, user_crop_name]])
+# Corrected input values for prediction
+user_input_values = np.array([[user_nitrogen, user_potassium, user_phosphorous]])
 
 if 'Crop_Name' in X.columns:
-    user_recommendation = classifier.predict(user_input_values[:, :-1])  # Exclude Crop Name for prediction
+    user_recommendation = classifier.predict(user_input_values)  # Exclude Crop Name for prediction
     print(f"Recommended Fertilizer is: {user_recommendation[0]}")
 else:
     user_recommendation = classifier.predict(user_input_values)
     print("Recommended Fertilizer is:", user_recommendation[0])
+
+# Convert the Decision Tree model to TensorFlow Lite format
+converter = tf.lite.TFLiteConverter.from_scikit_learn(classifier)
+tflite_model = converter.convert()
+
+# Save the TensorFlow Lite model to a file
+with open("converted_model.tflite", "wb") as f:
+    f.write(tflite_model)
